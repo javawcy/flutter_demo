@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:layout_demo/components/home_banner.dart';
 import 'package:layout_demo/components/home_button.dart';
@@ -31,5 +34,32 @@ class _HomePageState extends State<HomePage> {
         new HomeDetail()
       ],
     );
+  }
+
+  void _hello() async {
+    var url = "http://localhost:9981/hello";
+    var httpClient = new HttpClient();
+    String res;
+
+    try {
+      var request = await httpClient.getUrl(Uri.parse(url));
+      var response = await request.close();
+      if (response.statusCode == HttpStatus.ok) {
+        var json = await response.transform(utf8.decoder).join();
+        res = json;
+      } else {
+        res = "fail";
+      }
+    } catch (exception) {
+      res = "error";
+    }
+
+    debugPrint(res);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _hello();
   }
 }
