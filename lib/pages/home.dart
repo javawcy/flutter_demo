@@ -1,11 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:layout_demo/components/home_banner.dart';
 import 'package:layout_demo/components/home_button.dart';
 import 'package:layout_demo/components/home_detail.dart';
 import 'package:layout_demo/components/home_title.dart';
+import 'package:layout_demo/http/http_utils.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,24 +35,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _hello() async {
-    var url = "http://localhost:9981/hello";
-    var httpClient = new HttpClient();
-    String res;
-
-    try {
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
-      if (response.statusCode == HttpStatus.ok) {
-        var json = await response.transform(utf8.decoder).join();
-        res = json;
-      } else {
-        res = "fail";
-      }
-    } catch (exception) {
-      res = "error";
-    }
-
-    debugPrint(res);
+    final response = await HttpUtils.get("hello");
+    print(response);
   }
 
   @override
